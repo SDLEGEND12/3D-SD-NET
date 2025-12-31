@@ -1,0 +1,55 @@
+# ==============================
+# Python cache
+# ==============================
+__pycache__/
+*.pyc
+*.pyo
+
+# ==============================
+# OS / Editor
+# ==============================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ==============================
+# Virtual environments
+# ==============================
+venv/
+.env/
+
+# ==============================
+# RAW DATA (DO NOT COMMIT)
+# ==============================
+data/raw/
+data/datasets/
+data/brats/
+data/BraTS2021_Training_data/
+# Medical imaging formats
+*.nii
+*.nii.gz
+*.h5
+*.hdf5
+
+# ==============================
+# PREPROCESSED DATA / MODELS
+# ==============================
+cache/
+*.pt
+*.pth
+*.bin
+checkpoints/
+runs/
+
+# ==============================
+# OUTPUTS & LOGS
+# ==============================
+outputs/
+logs/
+wandb/
+
+# ==============================
+# Jupyter
+# ==============================
+.ipynb_checkpoints/
