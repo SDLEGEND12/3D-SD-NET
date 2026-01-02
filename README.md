@@ -1,5 +1,5 @@
 # 3D SD-NET 🧠
-Volumetric Brain Tumor Segmentation using 3D Vision Transformers
+Volumetric Organ Segmentation using 3D Vision Transformers
 
 ---
 
