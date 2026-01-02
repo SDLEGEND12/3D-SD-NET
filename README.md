@@ -37,7 +37,7 @@ Generate CSV files defining training and validation splits:
 
 ```bash
 python scripts/create_splits.py
-
+```
 
 This creates:
 
@@ -48,9 +48,9 @@ data/splits/
 2. Build Preprocessed Cache
 
 Preprocess volumetric data and store cached tensors for faster training:
-
+```
 python scripts/build_cache.py
-
+```
 
 Cached files are stored locally under:
 
@@ -62,34 +62,34 @@ Cache files are ignored by Git and not pushed to the repository.
 3. Train the Model
 
 Train the 3D SD-NET model using the cached data:
-
+```
 python scripts/train.py
-
+```
 
 During training:
 
 A checkpoint is saved every 5 epochs as:
-
+```
 outputs/checkpoints/last_checkpoint.pt
-
+```
 
 The best-performing model is saved as:
-
+```
 outputs/checkpoints/best_model.pt
-
+```
 Inference
 1. Standard Inference
 
 Run inference on volumetric data using the trained model:
-
+```
 python inferencing/inference.py
-
+```
 2. 3D Rendering / Visualization
 
 Visualize segmentation results in 3D:
-
+```
 python inferencing/3DRendering.py
-
+```
 Notes
 
 Raw datasets, cache files, and checkpoints are excluded from version control.
