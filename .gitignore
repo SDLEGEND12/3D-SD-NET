@@ -17,39 +17,27 @@ Thumbs.db
 # Virtual environments
 # ==============================
 venv/
-.env/
+.env
 
 # ==============================
-# RAW DATA (DO NOT COMMIT)
+# DATA (DO NOT UPLOAD)
 # ==============================
-data/raw/
-data/datasets/
-data/brats/
-data/BraTS2021_Training_data/
-# Medical imaging formats
+data/BraTS2021_Training_Data/
+data/Test/
+cache/
 *.nii
 *.nii.gz
 *.h5
-*.hdf5
 
 # ==============================
-# PREPROCESSED DATA / MODELS
-# ==============================
-cache/
-*.pt
-*.pth
-*.bin
-checkpoints/
-runs/
-
-# ==============================
-# OUTPUTS & LOGS
+# OUTPUTS (DO NOT UPLOAD)
 # ==============================
 outputs/
 logs/
 wandb/
 
 # ==============================
-# Jupyter
+# CHECKPOINTS
 # ==============================
-.ipynb_checkpoints/
+*.pt
+*.pth
