@@ -29,6 +29,18 @@ cache/
 *.nii.gz
 *.h5
 
+# Medical datasets
+data/Kidney/
+data/Task03_Liver/
+
+# macOS hidden files
+._*
+.DS_Store
+
+# NIfTI medical volumes
+*.nii
+*.nii.gz
+
 # ==============================
 # OUTPUTS (DO NOT UPLOAD)
 # ==============================
