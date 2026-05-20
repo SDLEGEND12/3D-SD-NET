@@ -8,7 +8,7 @@ from pathlib import Path
 import argparse
 from typing import Optional, Tuple, Dict
 import warnings
-
+from segmentation_metrics import BrainMetrics
 # =======================================================
 # PROJECT PATH
 # =======================================================
@@ -44,7 +44,14 @@ class Config:
 # =======================================================
 # VALIDATION
 # =======================================================
-def validate_paths(checkpoint_path: str, case_dir: str) -> None:
+def find_nii_file(case_path: Path, base: str) -> Path:
+    for ext in [".nii.gz", ".nii"]:
+        p = case_path / f"{base}{ext}"
+        if p.exists():
+            return p
+    raise FileNotFoundError(f"Missing file: {base}.nii or {base}.nii.gz")
+
+'''def validate_paths(checkpoint_path: str, case_dir: str) -> None:
     """Validate that required paths exist"""
     if not os.path.exists(checkpoint_path):
         raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
@@ -64,7 +71,19 @@ def validate_paths(checkpoint_path: str, case_dir: str) -> None:
     missing_files = [f for f in required_files if not (case_path / f).exists()]
     if missing_files:
         raise FileNotFoundError(f"Missing files in case directory: {missing_files}")
+'''
+def validate_paths(checkpoint_path: str, case_dir: str) -> None:
+    if not os.path.exists(checkpoint_path):
+        raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
 
+    if not os.path.exists(case_dir):
+        raise FileNotFoundError(f"Case directory not found: {case_dir}")
+
+    case_path = Path(case_dir)
+    name = case_path.name
+
+    for suffix in ["_flair", "_t1", "_t1ce", "_t2"]:
+        find_nii_file(case_path, f"{name}{suffix}")
 # =======================================================
 # MONAI PREPROCESS (EXACT TRAINING MATCH)
 # =======================================================
@@ -86,10 +105,10 @@ def preprocess_volume(case_dir: str) -> torch.Tensor:
 
     data = {
         "image": [
-            str(case_path / f"{name}_flair.nii.gz"),
-            str(case_path / f"{name}_t1.nii.gz"),
-            str(case_path / f"{name}_t1ce.nii.gz"),
-            str(case_path / f"{name}_t2.nii.gz"),
+            str(find_nii_file(case_path, f"{name}_flair")),
+            str(find_nii_file(case_path, f"{name}_t1")),
+            str(find_nii_file(case_path, f"{name}_t1ce")),
+            str(find_nii_file(case_path, f"{name}_t2")),
         ]
     }
 
@@ -143,9 +162,9 @@ def load_ground_truth(case_dir: str) -> Optional[np.ndarray]:
     
     case_path = Path(case_dir)
     name = case_path.name
-    seg_path = case_path / f"{name}_seg.nii.gz"
-    
-    if not seg_path.exists():
+    try:
+        seg_path = find_nii_file(case_path, f"{name}_seg")
+    except FileNotFoundError:
         print("⚠️  No ground truth segmentation found. Dice scores will not be calculated.")
         return None
     
@@ -475,7 +494,7 @@ def main():
                        default=r"D:\MajorProject\3D SD-NET\outputs\checkpoints\best_model(65.03)(StrongAug+SEB).pt",
                        help='Path to model checkpoint')
     parser.add_argument('--case-dir', type=str,
-                       default=r"D:\MajorProject\3D SD-NET\data\BraTS2021_Training_Data\BraTS2021_00310",
+                       default=r"D:\MajorProject\3D SD-NET\data\BraTS2021_Training_Data\BraTS2021_00078",
                        help='Path to case directory')
     parser.add_argument('--save', type=str, default=None,
                        help='Path to save screenshot')
@@ -527,8 +546,14 @@ def main():
     ground_truth = load_ground_truth(args.case_dir)
     
     if ground_truth is not None:
-        print("\n🎯 Calculating Dice scores...")
-        dice_scores = calculate_all_dice_scores(preds, ground_truth)
+        spacing = nib.load(
+            str(find_nii_file(Path(args.case_dir), f"{Path(args.case_dir).name}_flair"))
+        ).header.get_zooms()[:3]
+ 
+        m = BrainMetrics(preds, ground_truth, voxel_spacing_mm=tuple(spacing))
+        m.compute_all()
+        m.print_report()
+        m.save_csv("brain_metrics.csv")
     
     # Print statistics
     stats = print_voxel_statistics(preds, dice_scores)

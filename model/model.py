@@ -52,3 +52,4 @@ class Custom3DSegModel(nn.Module):
         # Segmentation head
         logits = self.seg_head(x, return_probs=False)
         return logits
+
