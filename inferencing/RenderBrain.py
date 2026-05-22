@@ -494,7 +494,7 @@ def main():
                        default=r"D:\MajorProject\3D SD-NET\outputs\checkpoints\best_model(65.03)(StrongAug+SEB).pt",
                        help='Path to model checkpoint')
     parser.add_argument('--case-dir', type=str,
-                       default=r"D:\MajorProject\3D SD-NET\data\BraTS2021_Training_Data\BraTS2021_00078",
+                       default=r"D:\MajorProject\3D SD-NET\data\BraTS2021_00087",
                        help='Path to case directory')
     parser.add_argument('--save', type=str, default=None,
                        help='Path to save screenshot')
