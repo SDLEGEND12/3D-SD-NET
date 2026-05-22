@@ -1,7 +1,15 @@
 # 3D SD-NET 🧠
 Volumetric Organ Segmentation using 3D Vision Transformers
 
----
+## Model Architecture
+
+<p align="center">
+  <img src="assets/architecture.png" alt="3D SD-NET Architecture" width="1000"/>
+</p>
+
+<p align="center">
+  <em>Overall architecture of the proposed 3D SD-NET for volumetric organ segmentation.</em>
+</p>
 
 ## Dataset
 
